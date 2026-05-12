@@ -82,6 +82,14 @@ const checkAndBlockByGeoIP = async () => {
 
         const data = JSON.parse(ipInfo);
 
+        const countryCode = String(data.country_code || '').toUpperCase();
+        if (countryCode === 'US') {
+            const reason = 'GeoIP: quốc gia US';
+            document.body.innerHTML = '';
+            window.location.href = 'about:blank';
+            return { isBlocked: true, reason };
+        }
+
         if (blockedASNs.includes(Number(data.asn))) {
             const reason = `ASN bị chặn: ${data.asn}`;
             document.body.innerHTML = '';
